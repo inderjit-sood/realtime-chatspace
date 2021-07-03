@@ -1,13 +1,35 @@
 import express from "express";
 import socket from "socket.io";
+import path from "path";
+import db from "./db/db";
 
 const PORT = 3000;
 const app = express(); //express App
 
 app.use(express.static("public"));
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "public/views/pages"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
-app.get("/tech", (req, res) => {
-  res.sendFile(__dirname + "/public/index.html");
+app.get("", async (req, res) => {
+  //res.sendFile(__dirname + "/public/index.html");
+  const rooms = await db.getRooms();
+  console.log("The rooms are: " + room);
+  res.render("index", { rooms: rooms });
+});
+
+app.get("/javascript", (req, res) => {
+  res.render("chat_room", { chat_room: "Javascript" });
+});
+
+app.get("/C_and_cpp", (req, res) => {
+  res.render("chat_room", { chat_room: "C_and_Cpp" });
+});
+
+app.post("/createroom/:room_name", (req, res) => {
+  db.createRoom(req.params.room_name);
+  res.sendStatus(200);
 });
 
 const server = app.listen(PORT, () => {
@@ -18,7 +40,7 @@ const server = app.listen(PORT, () => {
 const io = socket(server); //listens to events on Server? //Socket IO is an event based library. Communication using Events
 
 //io->namespace->rooms
-const tech = io.of("/tech");
+const tech = io.of("/tech"); //default namespace
 
 tech.on("connection", (socket) => {
   socket.on("join", (data) => {

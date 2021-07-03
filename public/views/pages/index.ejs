@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous" />
+    <link href="../../styles/room_styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4 bold">ChatterSpace! No moderation!</h1>
+          <p class="lead">Join the room you would like to join! Swearing is allowed! Kick ass and have some fun ;)</p>
+        </div>
+      </div>
+      <div class="row">
+        <h2>The following rooms are available:</h2>
+        <ul id="rooms" class="list-group"></ul>
+      </div>
+      <form>
+        <div class="mb-3">
+          <label for="create_chat_room" class="form-label">Create Room</label>
+          <input type="text" class="form-control" id="create_chat_room" />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.min.js" integrity="sha384-Atwg2Pkwv9vp0ygtn1JAojH0nYbwNJLPhwyoVbhoPwBhjQPR5VtM2+xf0Uwh9KtT" crossorigin="anonymous"></script>
+    <script>
+      const rooms = ["Python", "Java", "C++"];
+      const roomList = document.querySelector("#rooms");
+      if (rooms) {
+        rooms.forEach((room) => {
+          roomList.innerHTML += `<li class="list-group-item"><a href="/${room}">${room}</a></li>`;
+        });
+      }
+      const roomForm = document.querySelector("form");
+      const chatRoomName = document.querySelector("#create_chat_room");
+      roomForm.addEventListener("submit", (e) => {
+        // forward to /createroom/room_name
+        if (!chatRoomName) {
+          console.log("Chat room name blank. Please specify a valid name!");
+          return;
+        }
+        fetch(`/createroom/${chatRoomName.value}`, { method: "POST" })
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.log("error", error));
+      });
+    </script>
+  </body>
+</html>

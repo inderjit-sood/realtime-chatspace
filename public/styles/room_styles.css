@@ -1,0 +1,10 @@
+#rooms {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+#rooms li {
+  padding: 5px 10px;
+}
