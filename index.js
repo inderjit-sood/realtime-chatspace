@@ -14,13 +14,17 @@ app.use(express.json());
 
 app.get("", async (req, res) => {
   //res.sendFile(__dirname + "/public/index.html");
-  const rooms = await db.getRooms();
-  console.log("The rooms are: " + room);
-  res.render("index", { rooms: rooms });
+  let rooms = await db.getRooms();
+  let roomArray = [];
+  rooms.forEach((room) => {
+    roomArray.push(room.room_name);
+  });
+  console.log(roomArray);
+  res.render("index", { roomNames: roomArray });
 });
 
-app.get("/javascript", (req, res) => {
-  res.render("chat_room", { chat_room: "Javascript" });
+app.get("/chat_room/:room_name", (req, res) => {
+  res.render("chat_room", { chat_room: req.params.room_name });
 });
 
 app.get("/C_and_cpp", (req, res) => {

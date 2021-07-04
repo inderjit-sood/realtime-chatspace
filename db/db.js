@@ -38,9 +38,12 @@ async function createRoom(room_name) {
 }
 
 async function getRooms() {
-  const rooms = await roomModel.find({}, (err, room) => {
-    return [room];
+  let rooms;
+  await roomModel.find({}, (err, rms) => {
+    console.log(rms);
+    rooms = rms;
   });
+  return rooms;
 }
 
 export default { createRoom, getRooms };
